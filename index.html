@@ -6,7 +6,9 @@
 <title>Colour Sequence Game</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -43,7 +45,9 @@ body{
   padding:28px 36px;
 }
 
-.screen.active{display:flex}
+.screen.active{
+  display:flex;
+}
 
 .play-layout{
   width:100%;
@@ -244,17 +248,56 @@ button.secondary{
 }
 
 @media(max-width:900px){
-  .screen{padding:18px}
-  .play-layout{gap:12px}
-  h1{font-size:28px}
-  .subtitle{font-size:14px}
-  .card-panel,.answer-panel,.palette-panel{padding:15px}
-  .panel-title{font-size:17px}
-  .dot{width:52px;height:52px}
-  .slot{width:62px;height:62px}
-  .slot .dot{width:50px;height:50px}
-  .piece{width:62px;height:62px}
-  button{padding:10px 14px;font-size:14px}
+  .screen{
+    padding:18px;
+  }
+
+  .play-layout{
+    gap:12px;
+  }
+
+  h1{
+    font-size:28px;
+  }
+
+  .subtitle{
+    font-size:14px;
+  }
+
+  .card-panel,
+  .answer-panel,
+  .palette-panel{
+    padding:15px;
+  }
+
+  .panel-title{
+    font-size:17px;
+  }
+
+  .dot{
+    width:52px;
+    height:52px;
+  }
+
+  .slot{
+    width:62px;
+    height:62px;
+  }
+
+  .slot .dot{
+    width:50px;
+    height:50px;
+  }
+
+  .piece{
+    width:62px;
+    height:62px;
+  }
+
+  button{
+    padding:10px 14px;
+    font-size:14px;
+  }
 }
 </style>
 </head>
@@ -290,13 +333,25 @@ Look at the instruction card and arrange the colours in the same order.
 </div>
 
 <div class="bottom">
+
 <div id="status" class="status"></div>
 
 <div class="controls">
-<button id="checkBtn">Check Answer</button>
-<button id="newBtn" class="secondary">New Card</button>
-<button id="resetBtn" class="secondary">Reset</button>
+
+<button id="checkBtn">
+Check Answer
+</button>
+
+<button id="newBtn" class="secondary">
+New Card
+</button>
+
+<button id="resetBtn" class="secondary">
+Reset
+</button>
+
 </div>
+
 </div>
 
 </div>
@@ -311,9 +366,13 @@ Look at the instruction card and arrange the colours in the same order.
 
 <p>You arranged the colours correctly.</p>
 
-<div class="stars">⭐ ⭐ ⭐</div>
+<div class="stars">
+⭐ ⭐ ⭐
+</div>
 
-<button id="nextBtn">Next Challenge</button>
+<button id="nextBtn">
+Next Challenge
+</button>
 
 </div>
 
@@ -324,9 +383,13 @@ Look at the instruction card and arrange the colours in the same order.
 
 <h2>Try Again</h2>
 
-<p>Check the colour order and try once more.</p>
+<p>
+Check the colour order and try once more.
+</p>
 
-<button id="tryBtn">Try Again</button>
+<button id="tryBtn">
+Try Again
+</button>
 
 </div>
 
@@ -337,128 +400,186 @@ Look at the instruction card and arrange the colours in the same order.
 
 <script>
 
-const COLORS={
-red:{hex:"#ef4444",label:"Red"},
-blue:{hex:"#3b82f6",label:"Blue"},
-yellow:{hex:"#facc15",label:"Yellow"},
-green:{hex:"#22c55e",label:"Green"}
+const COLORS = {
+
+  red:{
+    hex:"#ef4444",
+    label:"Red"
+  },
+
+  blue:{
+    hex:"#3b82f6",
+    label:"Blue"
+  },
+
+  yellow:{
+    hex:"#facc15",
+    label:"Yellow"
+  },
+
+  green:{
+    hex:"#22c55e",
+    label:"Green"
+  }
+
 };
 
-const colorKeys=Object.keys(COLORS);
 
-let targetSequence=[];
-let answers=[null,null,null,null];
-let wrongChecks=0;
+const colorKeys =
+Object.keys(COLORS);
 
-const playScreen=document.getElementById("playScreen");
-const rewardScreen=document.getElementById("rewardScreen");
-const tryScreen=document.getElementById("tryScreen");
 
-const sequenceEl=document.getElementById("sequence");
-const targetsEl=document.getElementById("targets");
-const paletteEl=document.getElementById("palette");
-const statusEl=document.getElementById("status");
-const confettiEl=document.getElementById("confetti");
+let targetSequence = [];
+
+let answers =
+[null,null,null,null];
+
+let wrongChecks = 0;
+
+let currentSpeech = null;
+
+
+const playScreen =
+document.getElementById("playScreen");
+
+const rewardScreen =
+document.getElementById("rewardScreen");
+
+const tryScreen =
+document.getElementById("tryScreen");
+
+const sequenceEl =
+document.getElementById("sequence");
+
+const targetsEl =
+document.getElementById("targets");
+
+const paletteEl =
+document.getElementById("palette");
+
+const statusEl =
+document.getElementById("status");
+
+const confettiEl =
+document.getElementById("confetti");
 
 
 function shuffle(arr){
-return [...arr].sort(()=>Math.random()-.5);
+
+  return [...arr]
+  .sort(() => Math.random() - 0.5);
+
 }
 
 
 function showScreen(screen){
 
-[playScreen,rewardScreen,tryScreen]
-.forEach(s=>s.classList.remove("active"));
+  [
+    playScreen,
+    rewardScreen,
+    tryScreen
+  ]
+  .forEach(
+    s => s.classList.remove("active")
+  );
 
-screen.classList.add("active");
+  screen.classList.add("active");
 
 }
 
 
 function newChallenge(){
 
-targetSequence=shuffle(colorKeys);
+  targetSequence =
+  shuffle(colorKeys);
 
-answers=[null,null,null,null];
+  answers =
+  [null,null,null,null];
 
-wrongChecks=0;
+  wrongChecks = 0;
 
-statusEl.textContent="";
+  statusEl.textContent = "";
 
-showScreen(playScreen);
+  showScreen(playScreen);
 
-render();
+  render();
 
 }
 
 
 function render(){
 
-sequenceEl.innerHTML="";
+  sequenceEl.innerHTML = "";
 
-targetSequence.forEach(color=>{
+  targetSequence.forEach(color => {
 
-const dot=document.createElement("div");
+    const dot =
+    document.createElement("div");
 
-dot.className="dot";
+    dot.className = "dot";
 
-dot.style.background=COLORS[color].hex;
+    dot.style.background =
+    COLORS[color].hex;
 
-sequenceEl.appendChild(dot);
+    sequenceEl.appendChild(dot);
 
-});
+  });
 
 
-targetsEl.innerHTML="";
+  targetsEl.innerHTML = "";
 
-answers.forEach((value,index)=>{
+  answers.forEach((value,index) => {
 
-const slot=document.createElement("div");
+    const slot =
+    document.createElement("div");
 
-slot.className="slot";
+    slot.className = "slot";
 
-slot.dataset.index=index;
+    slot.dataset.index =
+    index;
 
-if(value){
+    if(value){
 
-const dot=document.createElement("div");
+      const dot =
+      document.createElement("div");
 
-dot.className="dot";
+      dot.className = "dot";
 
-dot.style.background=COLORS[value].hex;
+      dot.style.background =
+      COLORS[value].hex;
 
-slot.appendChild(dot);
+      slot.appendChild(dot);
+
+    }
+
+    targetsEl.appendChild(slot);
+
+  });
+
+
+  paletteEl.innerHTML = "";
+
+  colorKeys.forEach(color => {
+
+    const piece =
+    document.createElement("div");
+
+    piece.className = "piece";
+
+    piece.style.background =
+    COLORS[color].hex;
+
+    piece.dataset.color =
+    color;
+
+    attachDrag(piece);
+
+    paletteEl.appendChild(piece);
+
+  });
 
 }
 
-targetsEl.appendChild(slot);
-
-});
-
-
-paletteEl.innerHTML="";
-
-colorKeys.forEach(color=>{
-
-const piece=document.createElement("div");
-
-piece.className="piece";
-
-piece.style.background=COLORS[color].hex;
-
-piece.dataset.color=color;
-
-attachDrag(piece);
-
-paletteEl.appendChild(piece);
-
-});
-
-}
-
-
-let currentSpeech = null;
 
 function speakColor(color){
 
@@ -466,330 +587,418 @@ function speakColor(color){
     return;
   }
 
-  const synth = window.speechSynthesis;
+  const synth =
+  window.speechSynthesis;
 
   synth.cancel();
+
   synth.resume();
 
-  currentSpeech = new SpeechSynthesisUtterance(
+  currentSpeech =
+  new SpeechSynthesisUtterance(
     COLORS[color].label
   );
 
-  currentSpeech.lang = "en-US";
-  currentSpeech.rate = 0.75;
-  currentSpeech.pitch = 1;
-  currentSpeech.volume = 1;
+  currentSpeech.lang =
+  "en-US";
 
-  const voices = synth.getVoices();
+  currentSpeech.rate =
+  0.75;
 
-  const englishVoice = voices.find(
+  currentSpeech.pitch =
+  1;
+
+  currentSpeech.volume =
+  1;
+
+  const voices =
+  synth.getVoices();
+
+  const englishVoice =
+  voices.find(
     voice =>
-      voice.lang.startsWith("en")
+    voice.lang &&
+    voice.lang.startsWith("en")
   );
 
   if(englishVoice){
-    currentSpeech.voice = englishVoice;
+
+    currentSpeech.voice =
+    englishVoice;
+
   }
 
-  synth.speak(currentSpeech);
-}
+  synth.speak(
+    currentSpeech
+  );
 
 }
 
 
 function beep(correct=true){
 
-try{
+  try{
 
-const AudioCtx=
-window.AudioContext||
-window.webkitAudioContext;
+    const AudioCtx =
+    window.AudioContext ||
+    window.webkitAudioContext;
 
-const ctx=new AudioCtx();
+    const ctx =
+    new AudioCtx();
 
-const osc=ctx.createOscillator();
+    const osc =
+    ctx.createOscillator();
 
-const gain=ctx.createGain();
+    const gain =
+    ctx.createGain();
 
-osc.connect(gain);
+    osc.connect(gain);
 
-gain.connect(ctx.destination);
+    gain.connect(
+      ctx.destination
+    );
 
-osc.frequency.value=
-correct?720:220;
+    osc.frequency.value =
+    correct ? 720 : 220;
 
-gain.gain.value=.08;
+    gain.gain.value =
+    0.08;
 
-osc.start();
+    osc.start();
 
-osc.stop(
-ctx.currentTime+.18
-);
+    osc.stop(
+      ctx.currentTime + 0.18
+    );
 
-}catch(e){}
+  }catch(e){}
 
 }
 
 
 function attachDrag(element){
 
-let ghost=null;
+  let ghost = null;
 
 
-function start(event){
+  function start(event){
 
-event.preventDefault();
+    event.preventDefault();
 
-const color=element.dataset.color;
+    const color =
+    element.dataset.color;
 
-speakColor(color);
-
-
-const point=
-event.touches
-?event.touches[0]
-:event;
+    speakColor(color);
 
 
-ghost=element.cloneNode(true);
-
-ghost.classList.add("dragging");
-
-ghost.style.width=
-element.offsetWidth+"px";
-
-ghost.style.height=
-element.offsetHeight+"px";
-
-document.body.appendChild(ghost);
-
-moveGhost(
-point.clientX,
-point.clientY
-);
+    const point =
+    event.touches
+    ? event.touches[0]
+    : event;
 
 
-function move(ev){
+    ghost =
+    element.cloneNode(true);
 
-const p=
-ev.touches
-?ev.touches[0]
-:ev;
+    ghost.classList.add(
+      "dragging"
+    );
 
-moveGhost(
-p.clientX,
-p.clientY
-);
+    ghost.style.width =
+    element.offsetWidth + "px";
 
-}
+    ghost.style.height =
+    element.offsetHeight + "px";
 
+    document.body.appendChild(
+      ghost
+    );
 
-function end(ev){
-
-const p=
-ev.changedTouches
-?ev.changedTouches[0]
-:ev;
-
-const x=p.clientX;
-const y=p.clientY;
-
-if(ghost) ghost.remove();
-
-ghost=null;
+    moveGhost(
+      point.clientX,
+      point.clientY
+    );
 
 
-const below=
-document.elementFromPoint(x,y);
+    function move(ev){
 
-const slot=
-below
-?below.closest(".slot")
-:null;
+      ev.preventDefault();
 
+      const p =
+      ev.touches
+      ? ev.touches[0]
+      : ev;
 
-if(slot){
+      moveGhost(
+        p.clientX,
+        p.clientY
+      );
 
-const index=
-Number(
-slot.dataset.index
-);
-
-answers[index]=color;
-
-render();
-
-beep(true);
-
-}
+    }
 
 
-window.removeEventListener(
-"mousemove",move
-);
+    function end(ev){
 
-window.removeEventListener(
-"mouseup",end
-);
+      const p =
+      ev.changedTouches
+      ? ev.changedTouches[0]
+      : ev;
 
-window.removeEventListener(
-"touchmove",move
-);
+      const x =
+      p.clientX;
 
-window.removeEventListener(
-"touchend",end
-);
-
-}
+      const y =
+      p.clientY;
 
 
-window.addEventListener(
-"mousemove",move,
-{passive:false}
-);
+      if(ghost){
 
-window.addEventListener(
-"mouseup",end,
-{passive:false}
-);
+        ghost.remove();
 
-window.addEventListener(
-"touchmove",move,
-{passive:false}
-);
+      }
 
-window.addEventListener(
-"touchend",end,
-{passive:false}
-);
-
-}
+      ghost = null;
 
 
-element.addEventListener(
-"mousedown",start
-);
+      const below =
+      document.elementFromPoint(
+        x,
+        y
+      );
 
-element.addEventListener(
-"touchstart",start,
-{passive:false}
-);
+      const slot =
+      below
+      ? below.closest(".slot")
+      : null;
 
 
-function moveGhost(x,y){
+      if(slot){
 
-if(!ghost)return;
+        const index =
+        Number(
+          slot.dataset.index
+        );
 
-ghost.style.left=
-(x-ghost.offsetWidth/2)+"px";
+        answers[index] =
+        color;
 
-ghost.style.top=
-(y-ghost.offsetHeight/2)+"px";
+        render();
 
-}
+        beep(true);
+
+      }
+
+
+      window.removeEventListener(
+        "mousemove",
+        move
+      );
+
+      window.removeEventListener(
+        "mouseup",
+        end
+      );
+
+      window.removeEventListener(
+        "touchmove",
+        move
+      );
+
+      window.removeEventListener(
+        "touchend",
+        end
+      );
+
+    }
+
+
+    window.addEventListener(
+      "mousemove",
+      move,
+      {passive:false}
+    );
+
+    window.addEventListener(
+      "mouseup",
+      end,
+      {passive:false}
+    );
+
+    window.addEventListener(
+      "touchmove",
+      move,
+      {passive:false}
+    );
+
+    window.addEventListener(
+      "touchend",
+      end,
+      {passive:false}
+    );
+
+  }
+
+
+  element.addEventListener(
+    "mousedown",
+    start
+  );
+
+  element.addEventListener(
+    "touchstart",
+    start,
+    {passive:false}
+  );
+
+
+  function moveGhost(x,y){
+
+    if(!ghost){
+      return;
+    }
+
+    ghost.style.left =
+    (
+      x -
+      ghost.offsetWidth / 2
+    )
+    + "px";
+
+    ghost.style.top =
+    (
+      y -
+      ghost.offsetHeight / 2
+    )
+    + "px";
+
+  }
 
 }
 
 
 function checkAnswer(){
 
-if(
-answers.some(v=>!v)
-){
+  if(
+    answers.some(
+      value => !value
+    )
+  ){
 
-statusEl.textContent=
-"Fill all the circles first.";
+    statusEl.textContent =
+    "Fill all the circles first.";
 
-beep(false);
+    beep(false);
 
-return;
+    return;
 
-}
-
-
-const correct=
-answers.every(
-(v,i)=>
-v===targetSequence[i]
-);
+  }
 
 
-if(correct){
-
-beep(true);
-
-showScreen(rewardScreen);
-
-celebrate();
-
-}
-
-else{
-
-wrongChecks++;
-
-beep(false);
+  const correct =
+  answers.every(
+    (value,index) =>
+    value ===
+    targetSequence[index]
+  );
 
 
-if(wrongChecks>=2){
+  if(correct){
 
-showScreen(tryScreen);
+    beep(true);
 
-}
+    showScreen(
+      rewardScreen
+    );
 
-else{
+    celebrate();
 
-statusEl.textContent=
-"Almost! Check the order and try again.";
+  }
 
-}
+  else{
 
-}
+    wrongChecks++;
+
+    beep(false);
+
+
+    if(
+      wrongChecks >= 2
+    ){
+
+      showScreen(
+        tryScreen
+      );
+
+    }
+
+    else{
+
+      statusEl.textContent =
+      "Almost! Check the order and try again.";
+
+    }
+
+  }
 
 }
 
 
 function celebrate(){
 
-confettiEl.innerHTML="";
+  confettiEl.innerHTML = "";
 
-const colours=[
-"#ef4444",
-"#3b82f6",
-"#facc15",
-"#22c55e",
-"#a855f7",
-"#fb7185"
-];
+  const colours = [
 
+    "#ef4444",
+    "#3b82f6",
+    "#facc15",
+    "#22c55e",
+    "#a855f7",
+    "#fb7185"
 
-for(let i=0;i<50;i++){
-
-const item=
-document.createElement("span");
-
-item.style.left=
-Math.random()*100+"%";
-
-item.style.background=
-colours[
-Math.floor(
-Math.random()*colours.length
-)
-];
-
-item.style.animationDelay=
-Math.random()*.8+"s";
-
-confettiEl.appendChild(item);
-
-}
+  ];
 
 
-setTimeout(
-()=>confettiEl.innerHTML="",
-3000
-);
+  for(
+    let i = 0;
+    i < 50;
+    i++
+  ){
+
+    const item =
+    document.createElement(
+      "span"
+    );
+
+    item.style.left =
+    Math.random() * 100
+    + "%";
+
+    item.style.background =
+    colours[
+      Math.floor(
+        Math.random()
+        *
+        colours.length
+      )
+    ];
+
+    item.style.animationDelay =
+    Math.random() * 0.8
+    + "s";
+
+    confettiEl.appendChild(
+      item
+    );
+
+  }
+
+
+  setTimeout(
+    () => {
+      confettiEl.innerHTML = "";
+    },
+    3000
+  );
 
 }
 
@@ -797,62 +1006,64 @@ setTimeout(
 document
 .getElementById("checkBtn")
 .addEventListener(
-"click",
-checkAnswer
+  "click",
+  checkAnswer
 );
 
 
 document
 .getElementById("newBtn")
 .addEventListener(
-"click",
-newChallenge
+  "click",
+  newChallenge
 );
 
 
 document
 .getElementById("resetBtn")
 .addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-answers=
-[null,null,null,null];
+    answers =
+    [null,null,null,null];
 
-statusEl.textContent="";
+    statusEl.textContent = "";
 
-render();
+    render();
 
-}
+  }
 );
 
 
 document
 .getElementById("nextBtn")
 .addEventListener(
-"click",
-newChallenge
+  "click",
+  newChallenge
 );
 
 
 document
 .getElementById("tryBtn")
 .addEventListener(
-"click",
-()=>{
+  "click",
+  () => {
 
-answers=
-[null,null,null,null];
+    answers =
+    [null,null,null,null];
 
-wrongChecks=0;
+    wrongChecks = 0;
 
-statusEl.textContent="";
+    statusEl.textContent = "";
 
-showScreen(playScreen);
+    showScreen(
+      playScreen
+    );
 
-render();
+    render();
 
-}
+  }
 );
 
 
