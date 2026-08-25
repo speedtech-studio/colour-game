@@ -153,6 +153,13 @@ h1{
   letter-spacing:.5px;
 }
 
+.piece-wrap{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+
 .piece{
   width:78px;
   height:78px;
@@ -167,6 +174,12 @@ h1{
 
 .piece:active{
   transform:scale(1.08);
+}
+
+.piece-label{
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
 }
 
 .dragging{
@@ -280,6 +293,7 @@ button.secondary{
   .answer-item .dot{width:48px;height:48px}
   .colour-label{font-size:11px}
   .piece{width:62px;height:62px}
+  .piece-label{font-size:10px}
   button{padding:10px 14px;font-size:14px}
 }
 </style>
@@ -331,22 +345,18 @@ Look at the instruction card and arrange the colours in the same order.
 </div>
 
 <div id="rewardScreen" class="screen reward">
-
 <div class="big">🎉</div>
 <h2>Great Job!</h2>
 <p>You arranged the colours correctly.</p>
 <div class="stars">⭐ ⭐ ⭐</div>
 <button id="nextBtn">Next Challenge</button>
-
 </div>
 
 <div id="tryScreen" class="screen tryagain">
-
 <div class="big">💪</div>
 <h2>Try Again</h2>
 <p>Check the colour order and try once more.</p>
 <button id="tryBtn">Try Again</button>
-
 </div>
 
 <div id="confetti" class="confetti"></div>
@@ -358,22 +368,26 @@ Look at the instruction card and arrange the colours in the same order.
 const COLORS = {
   red:{
     hex:"#ef4444",
-    label:"Red"
+    label:"Red",
+    audio:"red.mp3"
   },
 
   blue:{
     hex:"#3b82f6",
-    label:"Blue"
+    label:"Blue",
+    audio:"blue.mp3"
   },
 
   yellow:{
     hex:"#facc15",
-    label:"Yellow"
+    label:"Yellow",
+    audio:"yellow.mp3"
   },
 
   green:{
     hex:"#22c55e",
-    label:"Green"
+    label:"Green",
+    audio:"green.mp3"
   }
 };
 
@@ -382,7 +396,6 @@ const colorKeys = Object.keys(COLORS);
 let targetSequence = [];
 let answers = [null,null,null,null];
 let wrongChecks = 0;
-let currentSpeech = null;
 
 const playScreen = document.getElementById("playScreen");
 const rewardScreen = document.getElementById("rewardScreen");
@@ -394,6 +407,41 @@ const paletteEl = document.getElementById("palette");
 const statusEl = document.getElementById("status");
 const confettiEl = document.getElementById("confetti");
 
+/* PRELOAD AUDIO */
+
+const AUDIO = {};
+
+colorKeys.forEach(color => {
+  AUDIO[color] = new Audio(COLORS[color].audio);
+  AUDIO[color].preload = "auto";
+});
+
+/* PLAY COLOUR AUDIO */
+
+function playColorAudio(color){
+
+  const audio = AUDIO[color];
+
+  if(!audio){
+    return;
+  }
+
+  try{
+    audio.pause();
+    audio.currentTime = 0;
+
+    const playPromise = audio.play();
+
+    if(playPromise){
+      playPromise.catch(error => {
+        console.log("Audio blocked:", error);
+      });
+    }
+
+  }catch(error){
+    console.log(error);
+  }
+}
 
 function shuffle(arr){
 
@@ -401,18 +449,17 @@ function shuffle(arr){
 
   for(let i = copy.length - 1; i > 0; i--){
 
-    const j = Math.floor(
+    const j =
+    Math.floor(
       Math.random() * (i + 1)
     );
 
     [copy[i],copy[j]] =
     [copy[j],copy[i]];
-
   }
 
   return copy;
 }
-
 
 function showScreen(screen){
 
@@ -422,9 +469,7 @@ function showScreen(screen){
   );
 
   screen.classList.add("active");
-
 }
-
 
 function newChallenge(){
 
@@ -441,9 +486,7 @@ function newChallenge(){
   showScreen(playScreen);
 
   render();
-
 }
-
 
 function render(){
 
@@ -460,7 +503,6 @@ function render(){
     COLORS[color].hex;
 
     sequenceEl.appendChild(dot);
-
   });
 
 
@@ -473,8 +515,7 @@ function render(){
 
     slot.className = "slot";
 
-    slot.dataset.index =
-    index;
+    slot.dataset.index = index;
 
 
     if(value){
@@ -510,18 +551,23 @@ function render(){
       wrapper.appendChild(label);
 
       slot.appendChild(wrapper);
-
     }
 
 
     targetsEl.appendChild(slot);
-
   });
 
 
   paletteEl.innerHTML = "";
 
   colorKeys.forEach(color => {
+
+    const wrapper =
+    document.createElement("div");
+
+    wrapper.className =
+    "piece-wrap";
+
 
     const piece =
     document.createElement("div");
@@ -535,80 +581,29 @@ function render(){
     piece.dataset.color =
     color;
 
-    piece.setAttribute(
-      "aria-label",
-      COLORS[color].label
-    );
+
+    const label =
+    document.createElement("div");
+
+    label.className =
+    "piece-label";
+
+    label.textContent =
+    COLORS[color].label;
+
 
     attachDrag(piece);
 
-    paletteEl.appendChild(piece);
 
+    wrapper.appendChild(piece);
+
+    wrapper.appendChild(label);
+
+    paletteEl.appendChild(wrapper);
   });
-
 }
 
-
-/* =========================
-   SPEAK COLOUR
-========================= */
-
-function speakColor(color){
-
-  if(!("speechSynthesis" in window)){
-    return;
-  }
-
-  const synth =
-  window.speechSynthesis;
-
-  synth.cancel();
-  synth.resume();
-
-  currentSpeech =
-  new SpeechSynthesisUtterance(
-    COLORS[color].label
-  );
-
-  currentSpeech.lang =
-  "en-US";
-
-  currentSpeech.rate =
-  0.70;
-
-  currentSpeech.pitch =
-  1;
-
-  currentSpeech.volume =
-  1;
-
-  const voices =
-  synth.getVoices();
-
-  const englishVoice =
-  voices.find(
-    voice =>
-    voice.lang &&
-    voice.lang
-    .toLowerCase()
-    .startsWith("en")
-  );
-
-  if(englishVoice){
-    currentSpeech.voice =
-    englishVoice;
-  }
-
-  synth.speak(
-    currentSpeech
-  );
-
-}
-
-
-/* =========================
-   FEEDBACK SOUND
-========================= */
+/* FEEDBACK BEEP FOR CHECK ANSWER ONLY */
 
 function feedbackSound(correct=true){
 
@@ -643,13 +638,9 @@ function feedbackSound(correct=true){
     );
 
   }catch(error){}
-
 }
 
-
-/* =========================
-   DRAG & DROP
-========================= */
+/* DRAG AND DROP */
 
 function attachDrag(element){
 
@@ -662,10 +653,9 @@ function attachDrag(element){
     const color =
     element.dataset.color;
 
-
     /* AUDIO MASA MULA DRAG */
 
-    speakColor(color);
+    playColorAudio(color);
 
 
     const point =
@@ -710,7 +700,6 @@ function attachDrag(element){
         p.clientX,
         p.clientY
       );
-
     }
 
 
@@ -758,19 +747,16 @@ function attachDrag(element){
         color;
 
 
-        /* PAPARKAN WARNA + NAMA */
+        /* SHOW COLOUR AND TEXT */
 
         render();
 
 
-        /* AUDIO SEKALI LAGI SELEPAS DROP */
+        /* AUDIO AGAIN AFTER DROP */
 
         setTimeout(() => {
-
-          speakColor(color);
-
-        },150);
-
+          playColorAudio(color);
+        },200);
       }
 
 
@@ -793,7 +779,6 @@ function attachDrag(element){
         "touchend",
         end
       );
-
     }
 
 
@@ -820,7 +805,6 @@ function attachDrag(element){
       end,
       {passive:false}
     );
-
   }
 
 
@@ -853,15 +837,10 @@ function attachDrag(element){
       y -
       ghost.offsetHeight / 2
     ) + "px";
-
   }
-
 }
 
-
-/* =========================
-   CHECK ANSWER
-========================= */
+/* CHECK ANSWER */
 
 function checkAnswer(){
 
@@ -877,15 +856,13 @@ function checkAnswer(){
     feedbackSound(false);
 
     return;
-
   }
 
 
   const correct =
   answers.every(
     (value,index) =>
-    value ===
-    targetSequence[index]
+    value === targetSequence[index]
   );
 
 
@@ -898,7 +875,6 @@ function checkAnswer(){
     );
 
     celebrate();
-
   }
 
   else{
@@ -913,24 +889,17 @@ function checkAnswer(){
       showScreen(
         tryScreen
       );
-
     }
 
     else{
 
       statusEl.textContent =
       "Almost! Check the order and try again.";
-
     }
-
   }
-
 }
 
-
-/* =========================
-   CONFETTI
-========================= */
+/* CONFETTI */
 
 function celebrate(){
 
@@ -946,16 +915,10 @@ function celebrate(){
   ];
 
 
-  for(
-    let i = 0;
-    i < 50;
-    i++
-  ){
+  for(let i = 0; i < 50; i++){
 
     const item =
-    document.createElement(
-      "span"
-    );
+    document.createElement("span");
 
     item.style.left =
     Math.random() * 100
@@ -964,8 +927,7 @@ function celebrate(){
     item.style.background =
     colours[
       Math.floor(
-        Math.random()
-        *
+        Math.random() *
         colours.length
       )
     ];
@@ -974,25 +936,16 @@ function celebrate(){
     Math.random() * 0.8
     + "s";
 
-    confettiEl.appendChild(
-      item
-    );
-
+    confettiEl.appendChild(item);
   }
 
 
   setTimeout(() => {
-
     confettiEl.innerHTML = "";
-
   },3000);
-
 }
 
-
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 
 document
 .getElementById("checkBtn")
@@ -1001,14 +954,12 @@ document
   checkAnswer
 );
 
-
 document
 .getElementById("newBtn")
 .addEventListener(
   "click",
   newChallenge
 );
-
 
 document
 .getElementById("resetBtn")
@@ -1024,10 +975,8 @@ document
     statusEl.textContent = "";
 
     render();
-
   }
 );
-
 
 document
 .getElementById("nextBtn")
@@ -1035,7 +984,6 @@ document
   "click",
   newChallenge
 );
-
 
 document
 .getElementById("tryBtn")
@@ -1055,10 +1003,8 @@ document
     );
 
     render();
-
   }
 );
-
 
 newChallenge();
 
