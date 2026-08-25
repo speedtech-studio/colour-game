@@ -2,13 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Colour Sequence Game</title>
 
 <style>
-
 *{
   box-sizing:border-box;
 }
@@ -52,10 +49,6 @@ body{
   display:flex;
 }
 
-/* =========================
-   MAIN LANDSCAPE LAYOUT
-========================= */
-
 .play-layout{
   width:100%;
   height:100%;
@@ -79,11 +72,6 @@ h1{
   color:#666;
   font-size:17px;
 }
-
-
-/* =========================
-   PANELS
-========================= */
 
 .card-panel,
 .answer-panel,
@@ -111,11 +99,6 @@ h1{
   margin-bottom:18px;
 }
 
-
-/* =========================
-   COLOUR CIRCLES
-========================= */
-
 .sequence,
 .targets,
 .palette{
@@ -138,22 +121,15 @@ h1{
   box-shadow:0 6px 12px rgba(0,0,0,.08);
 }
 
-
-/* =========================
-   ANSWER SLOTS
-========================= */
-
 .slot{
   width:88px;
   min-height:112px;
   border-radius:20px;
   border:4px dashed #bfc4cc;
   background:white;
-
   display:flex;
   align-items:center;
   justify-content:center;
-
   padding:7px;
 }
 
@@ -177,28 +153,16 @@ h1{
   letter-spacing:.5px;
 }
 
-
-/* =========================
-   DRAG PIECES
-========================= */
-
 .piece{
   width:78px;
   height:78px;
   border-radius:50%;
-
   border:4px solid rgba(0,0,0,.1);
-
-  box-shadow:
-  0 8px 16px rgba(0,0,0,.13);
-
+  box-shadow:0 8px 16px rgba(0,0,0,.13);
   cursor:grab;
   touch-action:none;
   user-select:none;
-
-  transition:
-  transform .15s ease,
-  box-shadow .15s ease;
+  transition:transform .15s ease;
 }
 
 .piece:active{
@@ -210,23 +174,14 @@ h1{
   z-index:9999;
   pointer-events:none;
   transform:scale(1.10);
-
-  box-shadow:
-  0 14px 28px rgba(0,0,0,.22);
+  box-shadow:0 14px 28px rgba(0,0,0,.22);
 }
-
-
-/* =========================
-   BOTTOM BUTTONS
-========================= */
 
 .bottom{
   grid-column:1 / 4;
-
   display:flex;
   flex-direction:column;
   align-items:center;
-
   gap:10px;
 }
 
@@ -244,14 +199,10 @@ h1{
 button{
   border:none;
   border-radius:15px;
-
   padding:13px 20px;
-
   font-size:17px;
   font-weight:600;
-
   cursor:pointer;
-
   background:#222;
   color:#fff;
 }
@@ -261,16 +212,10 @@ button.secondary{
   color:#222;
 }
 
-
-/* =========================
-   REWARD / TRY AGAIN
-========================= */
-
 .reward,
 .tryagain{
   align-items:center;
   justify-content:center;
-
   flex-direction:column;
   text-align:center;
 }
@@ -298,291 +243,119 @@ button.secondary{
   margin:8px 0 24px;
 }
 
-
-/* =========================
-   CONFETTI
-========================= */
-
 .confetti{
   position:absolute;
   inset:0;
-
   pointer-events:none;
   overflow:hidden;
 }
 
 .confetti span{
   position:absolute;
-
   top:-20px;
-
   width:14px;
   height:22px;
-
   border-radius:4px;
-
-  animation:
-  fall 2.5s linear forwards;
+  animation:fall 2.5s linear forwards;
 }
 
 @keyframes fall{
-
   to{
-    transform:
-    translateY(100vh)
-    rotate(720deg);
-
+    transform:translateY(100vh) rotate(720deg);
     opacity:.2;
   }
-
 }
-
-
-/* =========================
-   SMALL SCREEN / CANVA
-========================= */
 
 @media(max-width:900px){
-
-  .screen{
-    padding:18px;
-  }
-
-  .play-layout{
-    gap:12px;
-  }
-
-  h1{
-    font-size:28px;
-  }
-
-  .subtitle{
-    font-size:14px;
-  }
-
+  .screen{padding:18px}
+  .play-layout{gap:12px}
+  h1{font-size:28px}
+  .subtitle{font-size:14px}
   .card-panel,
   .answer-panel,
-  .palette-panel{
-    padding:15px;
-  }
-
-  .panel-title{
-    font-size:17px;
-  }
-
-  .dot{
-    width:52px;
-    height:52px;
-  }
-
-  .slot{
-    width:70px;
-    min-height:94px;
-  }
-
-  .answer-item .dot{
-    width:48px;
-    height:48px;
-  }
-
-  .colour-label{
-    font-size:11px;
-  }
-
-  .piece{
-    width:62px;
-    height:62px;
-  }
-
-  button{
-    padding:10px 14px;
-    font-size:14px;
-  }
-
+  .palette-panel{padding:15px}
+  .panel-title{font-size:17px}
+  .dot{width:52px;height:52px}
+  .slot{width:70px;min-height:94px}
+  .answer-item .dot{width:48px;height:48px}
+  .colour-label{font-size:11px}
+  .piece{width:62px;height:62px}
+  button{padding:10px 14px;font-size:14px}
 }
-
 </style>
 </head>
-
 
 <body>
 
 <div class="game">
 
-
-<!-- =========================
-     GAME SCREEN
-========================= -->
-
-<div id="playScreen"
-class="screen active">
+<div id="playScreen" class="screen active">
 
 <div class="play-layout">
 
-
 <div class="header">
-
-<h1>
-Arrange the Colours
-</h1>
-
+<h1>Arrange the Colours</h1>
 <p class="subtitle">
 Look at the instruction card and arrange the colours in the same order.
 </p>
-
 </div>
-
-
-<!-- INSTRUCTION CARD -->
 
 <div class="card-panel">
-
-<div class="panel-title">
-Instruction Card
+<div class="panel-title">Instruction Card</div>
+<div id="sequence" class="sequence"></div>
 </div>
-
-<div id="sequence"
-class="sequence">
-</div>
-
-</div>
-
-
-<!-- ANSWER AREA -->
 
 <div class="answer-panel">
-
-<div class="panel-title">
-Arrange Here
+<div class="panel-title">Arrange Here</div>
+<div id="targets" class="targets"></div>
 </div>
-
-<div id="targets"
-class="targets">
-</div>
-
-</div>
-
-
-<!-- DRAG AREA -->
 
 <div class="palette-panel">
-
-<div class="panel-title">
-Drag the Colours
+<div class="panel-title">Drag the Colours</div>
+<div id="palette" class="palette"></div>
 </div>
-
-<div id="palette"
-class="palette">
-</div>
-
-</div>
-
-
-<!-- BUTTONS -->
 
 <div class="bottom">
 
-<div id="status"
-class="status">
-</div>
+<div id="status" class="status"></div>
 
 <div class="controls">
-
-<button id="checkBtn">
-Check Answer
-</button>
-
-<button id="newBtn"
-class="secondary">
-New Card
-</button>
-
-<button id="resetBtn"
-class="secondary">
-Reset
-</button>
-
+<button id="checkBtn">Check Answer</button>
+<button id="newBtn" class="secondary">New Card</button>
+<button id="resetBtn" class="secondary">Reset</button>
 </div>
 
 </div>
 
-
 </div>
 </div>
 
+<div id="rewardScreen" class="screen reward">
 
-<!-- =========================
-     REWARD PAGE
-========================= -->
-
-<div id="rewardScreen"
-class="screen reward">
-
-<div class="big">
-🎉
-</div>
-
-<h2>
-Great Job!
-</h2>
-
-<p>
-You arranged the colours correctly.
-</p>
-
-<div class="stars">
-⭐ ⭐ ⭐
-</div>
-
-<button id="nextBtn">
-Next Challenge
-</button>
+<div class="big">🎉</div>
+<h2>Great Job!</h2>
+<p>You arranged the colours correctly.</p>
+<div class="stars">⭐ ⭐ ⭐</div>
+<button id="nextBtn">Next Challenge</button>
 
 </div>
 
+<div id="tryScreen" class="screen tryagain">
 
-<!-- =========================
-     TRY AGAIN PAGE
-========================= -->
-
-<div id="tryScreen"
-class="screen tryagain">
-
-<div class="big">
-💪
-</div>
-
-<h2>
-Try Again
-</h2>
-
-<p>
-Check the colour order and try once more.
-</p>
-
-<button id="tryBtn">
-Try Again
-</button>
+<div class="big">💪</div>
+<h2>Try Again</h2>
+<p>Check the colour order and try once more.</p>
+<button id="tryBtn">Try Again</button>
 
 </div>
 
-
-<div id="confetti"
-class="confetti">
-</div>
-
+<div id="confetti" class="confetti"></div>
 
 </div>
-
 
 <script>
 
-/* =========================
-   COLOURS
-========================= */
-
-const COLORS={
-
+const COLORS = {
   red:{
     hex:"#ef4444",
     label:"Red"
@@ -602,303 +375,176 @@ const COLORS={
     hex:"#22c55e",
     label:"Green"
   }
-
 };
 
+const colorKeys = Object.keys(COLORS);
 
-const colorKeys=
-Object.keys(COLORS);
+let targetSequence = [];
+let answers = [null,null,null,null];
+let wrongChecks = 0;
+let currentSpeech = null;
 
+const playScreen = document.getElementById("playScreen");
+const rewardScreen = document.getElementById("rewardScreen");
+const tryScreen = document.getElementById("tryScreen");
 
-let targetSequence=[];
+const sequenceEl = document.getElementById("sequence");
+const targetsEl = document.getElementById("targets");
+const paletteEl = document.getElementById("palette");
+const statusEl = document.getElementById("status");
+const confettiEl = document.getElementById("confetti");
 
-let answers=[
-  null,
-  null,
-  null,
-  null
-];
-
-let wrongChecks=0;
-
-let currentSpeech=null;
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const playScreen=
-document.getElementById(
-  "playScreen"
-);
-
-const rewardScreen=
-document.getElementById(
-  "rewardScreen"
-);
-
-const tryScreen=
-document.getElementById(
-  "tryScreen"
-);
-
-const sequenceEl=
-document.getElementById(
-  "sequence"
-);
-
-const targetsEl=
-document.getElementById(
-  "targets"
-);
-
-const paletteEl=
-document.getElementById(
-  "palette"
-);
-
-const statusEl=
-document.getElementById(
-  "status"
-);
-
-const confettiEl=
-document.getElementById(
-  "confetti"
-);
-
-
-/* =========================
-   SHUFFLE
-========================= */
 
 function shuffle(arr){
 
-  const copy=[...arr];
+  const copy = [...arr];
 
-  for(
-    let i=copy.length-1;
-    i>0;
-    i--
-  ){
+  for(let i = copy.length - 1; i > 0; i--){
 
-    const j=
-    Math.floor(
-      Math.random()*(i+1)
+    const j = Math.floor(
+      Math.random() * (i + 1)
     );
 
-    [
-      copy[i],
-      copy[j]
-    ]=[
-      copy[j],
-      copy[i]
-    ];
+    [copy[i],copy[j]] =
+    [copy[j],copy[i]];
 
   }
 
   return copy;
-
 }
 
-
-/* =========================
-   SCREEN CONTROL
-========================= */
 
 function showScreen(screen){
 
-  [
-    playScreen,
-    rewardScreen,
-    tryScreen
-  ]
+  [playScreen,rewardScreen,tryScreen]
   .forEach(
-    s=>
-    s.classList.remove(
-      "active"
-    )
+    s => s.classList.remove("active")
   );
 
-  screen.classList.add(
-    "active"
-  );
+  screen.classList.add("active");
 
 }
 
 
-/* =========================
-   NEW CHALLENGE
-========================= */
-
 function newChallenge(){
 
-  targetSequence=
+  targetSequence =
   shuffle(colorKeys);
 
-  answers=[
-    null,
-    null,
-    null,
-    null
-  ];
+  answers =
+  [null,null,null,null];
 
-  wrongChecks=0;
+  wrongChecks = 0;
 
-  statusEl.textContent="";
+  statusEl.textContent = "";
 
-  showScreen(
-    playScreen
-  );
+  showScreen(playScreen);
 
   render();
 
 }
 
 
-/* =========================
-   RENDER GAME
-========================= */
-
 function render(){
 
-  /* INSTRUCTION */
+  sequenceEl.innerHTML = "";
 
-  sequenceEl.innerHTML="";
+  targetSequence.forEach(color => {
 
-  targetSequence.forEach(
-    color=>{
+    const dot =
+    document.createElement("div");
 
-      const dot=
-      document.createElement(
-        "div"
-      );
+    dot.className = "dot";
 
-      dot.className="dot";
+    dot.style.background =
+    COLORS[color].hex;
 
-      dot.style.background=
-      COLORS[color].hex;
+    sequenceEl.appendChild(dot);
 
-      sequenceEl.appendChild(
-        dot
-      );
-
-    }
-  );
+  });
 
 
-  /* ANSWER SLOTS */
+  targetsEl.innerHTML = "";
 
-  targetsEl.innerHTML="";
+  answers.forEach((value,index) => {
 
-  answers.forEach(
-    (value,index)=>{
+    const slot =
+    document.createElement("div");
 
-      const slot=
-      document.createElement(
-        "div"
-      );
+    slot.className = "slot";
 
-      slot.className="slot";
-
-      slot.dataset.index=
-      index;
+    slot.dataset.index =
+    index;
 
 
-      if(value){
+    if(value){
 
-        const wrapper=
-        document.createElement(
-          "div"
-        );
+      const wrapper =
+      document.createElement("div");
 
-        wrapper.className=
-        "answer-item";
+      wrapper.className =
+      "answer-item";
 
 
-        const dot=
-        document.createElement(
-          "div"
-        );
+      const dot =
+      document.createElement("div");
 
-        dot.className="dot";
+      dot.className = "dot";
 
-        dot.style.background=
-        COLORS[value].hex;
+      dot.style.background =
+      COLORS[value].hex;
 
 
-        const label=
-        document.createElement(
-          "div"
-        );
+      const label =
+      document.createElement("div");
 
-        label.className=
-        "colour-label";
+      label.className =
+      "colour-label";
 
-        label.textContent=
-        COLORS[value].label;
+      label.textContent =
+      COLORS[value].label;
 
 
-        wrapper.appendChild(
-          dot
-        );
+      wrapper.appendChild(dot);
 
-        wrapper.appendChild(
-          label
-        );
+      wrapper.appendChild(label);
 
-        slot.appendChild(
-          wrapper
-        );
-
-      }
-
-
-      targetsEl.appendChild(
-        slot
-      );
+      slot.appendChild(wrapper);
 
     }
-  );
 
 
-  /* COLOURS TO DRAG */
+    targetsEl.appendChild(slot);
 
-  paletteEl.innerHTML="";
+  });
 
-  colorKeys.forEach(
-    color=>{
 
-      const piece=
-      document.createElement(
-        "div"
-      );
+  paletteEl.innerHTML = "";
 
-      piece.className=
-      "piece";
+  colorKeys.forEach(color => {
 
-      piece.style.background=
-      COLORS[color].hex;
+    const piece =
+    document.createElement("div");
 
-      piece.dataset.color=
-      color;
+    piece.className =
+    "piece";
 
-      piece.setAttribute(
-        "aria-label",
-        COLORS[color].label
-      );
+    piece.style.background =
+    COLORS[color].hex;
 
-      attachDrag(
-        piece
-      );
+    piece.dataset.color =
+    color;
 
-      paletteEl.appendChild(
-        piece
-      );
+    piece.setAttribute(
+      "aria-label",
+      COLORS[color].label
+    );
 
-    }
-  );
+    attachDrag(piece);
+
+    paletteEl.appendChild(piece);
+
+  });
 
 }
 
@@ -909,67 +555,49 @@ function render(){
 
 function speakColor(color){
 
-  if(
-    !(
-      "speechSynthesis"
-      in window
-    )
-  ){
-
+  if(!("speechSynthesis" in window)){
     return;
-
   }
 
-
-  const synth=
+  const synth =
   window.speechSynthesis;
 
-
   synth.cancel();
-
   synth.resume();
 
-
-  currentSpeech=
+  currentSpeech =
   new SpeechSynthesisUtterance(
     COLORS[color].label
   );
 
-
-  currentSpeech.lang=
+  currentSpeech.lang =
   "en-US";
 
-  currentSpeech.rate=
-  0.72;
+  currentSpeech.rate =
+  0.70;
 
-  currentSpeech.pitch=
+  currentSpeech.pitch =
   1;
 
-  currentSpeech.volume=
+  currentSpeech.volume =
   1;
 
-
-  const voices=
+  const voices =
   synth.getVoices();
 
-
-  const englishVoice=
+  const englishVoice =
   voices.find(
-    voice=>
+    voice =>
     voice.lang &&
     voice.lang
     .toLowerCase()
     .startsWith("en")
   );
 
-
   if(englishVoice){
-
-    currentSpeech.voice=
+    currentSpeech.voice =
     englishVoice;
-
   }
-
 
   synth.speak(
     currentSpeech
@@ -979,120 +607,89 @@ function speakColor(color){
 
 
 /* =========================
-   CORRECT / WRONG SOUND
+   FEEDBACK SOUND
 ========================= */
 
-function feedbackSound(
-  correct=true
-){
+function feedbackSound(correct=true){
 
   try{
 
-    const AudioCtx=
+    const AudioCtx =
     window.AudioContext ||
     window.webkitAudioContext;
 
-
-    const ctx=
+    const ctx =
     new AudioCtx();
 
-
-    const osc=
+    const osc =
     ctx.createOscillator();
 
-
-    const gain=
+    const gain =
     ctx.createGain();
 
+    osc.connect(gain);
+    gain.connect(ctx.destination);
 
-    osc.connect(
-      gain
-    );
+    osc.frequency.value =
+    correct ? 760 : 210;
 
-    gain.connect(
-      ctx.destination
-    );
-
-
-    osc.frequency.value=
-    correct
-    ? 760
-    : 210;
-
-
-    gain.gain.value=
-    0.06;
-
+    gain.gain.value =
+    0.05;
 
     osc.start();
 
-
     osc.stop(
-      ctx.currentTime
-      +
-      0.16
+      ctx.currentTime + 0.16
     );
 
-  }
-
-  catch(error){}
+  }catch(error){}
 
 }
 
 
 /* =========================
-   DRAG AND DROP
+   DRAG & DROP
 ========================= */
 
-function attachDrag(
-  element
-){
+function attachDrag(element){
 
-  let ghost=null;
-
+  let ghost = null;
 
   function start(event){
 
     event.preventDefault();
 
-
-    const color=
+    const color =
     element.dataset.color;
 
 
-    const point=
+    /* AUDIO MASA MULA DRAG */
+
+    speakColor(color);
+
+
+    const point =
     event.touches
     ? event.touches[0]
     : event;
 
 
-    ghost=
-    element.cloneNode(
-      true
-    );
-
+    ghost =
+    element.cloneNode(true);
 
     ghost.classList.add(
       "dragging"
     );
 
+    ghost.style.width =
+    element.offsetWidth + "px";
 
-    ghost.style.width=
-    element.offsetWidth
-    +
-    "px";
-
-
-    ghost.style.height=
-    element.offsetHeight
-    +
-    "px";
-
+    ghost.style.height =
+    element.offsetHeight + "px";
 
     document.body.appendChild(
       ghost
     );
-
 
     moveGhost(
       point.clientX,
@@ -1104,12 +701,10 @@ function attachDrag(
 
       ev.preventDefault();
 
-
-      const p=
+      const p =
       ev.touches
       ? ev.touches[0]
       : ev;
-
 
       moveGhost(
         p.clientX,
@@ -1121,71 +716,60 @@ function attachDrag(
 
     function end(ev){
 
-      const p=
+      const p =
       ev.changedTouches
       ? ev.changedTouches[0]
       : ev;
 
-
-      const x=
+      const x =
       p.clientX;
 
-      const y=
+      const y =
       p.clientY;
 
 
       if(ghost){
-
         ghost.remove();
-
       }
 
+      ghost = null;
 
-      ghost=null;
 
-
-      const below=
+      const below =
       document.elementFromPoint(
         x,
         y
       );
 
-
-      const slot=
+      const slot =
       below
-      ? below.closest(
-          ".slot"
-        )
+      ? below.closest(".slot")
       : null;
 
 
       if(slot){
 
-        const index=
+        const index =
         Number(
           slot.dataset.index
         );
 
-
-        answers[index]=
+        answers[index] =
         color;
 
 
-        /*
-        IMPORTANT:
-        SAY COLOUR AFTER DROP
-        */
-
-        speakColor(
-          color
-        );
-
-
-        /*
-        SHOW COLOUR + WORD
-        */
+        /* PAPARKAN WARNA + NAMA */
 
         render();
+
+
+        /* AUDIO SEKALI LAGI SELEPAS DROP */
+
+        setTimeout(() => {
+
+          speakColor(color);
+
+        },150);
 
       }
 
@@ -1219,20 +803,17 @@ function attachDrag(
       {passive:false}
     );
 
-
     window.addEventListener(
       "mouseup",
       end,
       {passive:false}
     );
 
-
     window.addEventListener(
       "touchmove",
       move,
       {passive:false}
     );
-
 
     window.addEventListener(
       "touchend",
@@ -1248,7 +829,6 @@ function attachDrag(
     start
   );
 
-
   element.addEventListener(
     "touchstart",
     start,
@@ -1256,36 +836,23 @@ function attachDrag(
   );
 
 
-  function moveGhost(
-    x,
-    y
-  ){
+  function moveGhost(x,y){
 
     if(!ghost){
-
       return;
-
     }
 
-
-    ghost.style.left=
+    ghost.style.left =
     (
-      x
-      -
-      ghost.offsetWidth/2
-    )
-    +
-    "px";
+      x -
+      ghost.offsetWidth / 2
+    ) + "px";
 
-
-    ghost.style.top=
+    ghost.style.top =
     (
-      y
-      -
-      ghost.offsetHeight/2
-    )
-    +
-    "px";
+      y -
+      ghost.offsetHeight / 2
+    ) + "px";
 
   }
 
@@ -1300,60 +867,48 @@ function checkAnswer(){
 
   if(
     answers.some(
-      value=>!value
+      value => !value
     )
   ){
 
-    statusEl.textContent=
+    statusEl.textContent =
     "Fill all the circles first.";
 
-    feedbackSound(
-      false
-    );
+    feedbackSound(false);
 
     return;
 
   }
 
 
-  const correct=
+  const correct =
   answers.every(
-    (value,index)=>
-    value===
+    (value,index) =>
+    value ===
     targetSequence[index]
   );
 
 
   if(correct){
 
-    feedbackSound(
-      true
-    );
-
+    feedbackSound(true);
 
     showScreen(
       rewardScreen
     );
 
-
     celebrate();
 
   }
-
 
   else{
 
     wrongChecks++;
 
-
-    feedbackSound(
-      false
-    );
+    feedbackSound(false);
 
 
-    if(
-      wrongChecks>=2
-    ){
+    if(wrongChecks >= 2){
 
       showScreen(
         tryScreen
@@ -1361,10 +916,9 @@ function checkAnswer(){
 
     }
 
-
     else{
 
-      statusEl.textContent=
+      statusEl.textContent =
       "Almost! Check the order and try again.";
 
     }
@@ -1380,42 +934,34 @@ function checkAnswer(){
 
 function celebrate(){
 
-  confettiEl.innerHTML="";
+  confettiEl.innerHTML = "";
 
-
-  const colours=[
-
+  const colours = [
     "#ef4444",
     "#3b82f6",
     "#facc15",
     "#22c55e",
     "#a855f7",
     "#fb7185"
-
   ];
 
 
   for(
-    let i=0;
-    i<50;
+    let i = 0;
+    i < 50;
     i++
   ){
 
-    const item=
+    const item =
     document.createElement(
       "span"
     );
 
+    item.style.left =
+    Math.random() * 100
+    + "%";
 
-    item.style.left=
-    Math.random()
-    *
-    100
-    +
-    "%";
-
-
-    item.style.background=
+    item.style.background =
     colours[
       Math.floor(
         Math.random()
@@ -1424,14 +970,9 @@ function celebrate(){
       )
     ];
 
-
-    item.style.animationDelay=
-    Math.random()
-    *
-    0.8
-    +
-    "s";
-
+    item.style.animationDelay =
+    Math.random() * 0.8
+    + "s";
 
     confettiEl.appendChild(
       item
@@ -1440,14 +981,11 @@ function celebrate(){
   }
 
 
-  setTimeout(
-    ()=>{
+  setTimeout(() => {
 
-      confettiEl.innerHTML="";
+    confettiEl.innerHTML = "";
 
-    },
-    3000
-  );
+  },3000);
 
 }
 
@@ -1457,9 +995,7 @@ function celebrate(){
 ========================= */
 
 document
-.getElementById(
-  "checkBtn"
-)
+.getElementById("checkBtn")
 .addEventListener(
   "click",
   checkAnswer
@@ -1467,9 +1003,7 @@ document
 
 
 document
-.getElementById(
-  "newBtn"
-)
+.getElementById("newBtn")
 .addEventListener(
   "click",
   newChallenge
@@ -1477,23 +1011,17 @@ document
 
 
 document
-.getElementById(
-  "resetBtn"
-)
+.getElementById("resetBtn")
 .addEventListener(
   "click",
-  ()=>{
+  () => {
 
-    answers=[
-      null,
-      null,
-      null,
-      null
-    ];
+    answers =
+    [null,null,null,null];
 
-    wrongChecks=0;
+    wrongChecks = 0;
 
-    statusEl.textContent="";
+    statusEl.textContent = "";
 
     render();
 
@@ -1502,9 +1030,7 @@ document
 
 
 document
-.getElementById(
-  "nextBtn"
-)
+.getElementById("nextBtn")
 .addEventListener(
   "click",
   newChallenge
@@ -1512,23 +1038,17 @@ document
 
 
 document
-.getElementById(
-  "tryBtn"
-)
+.getElementById("tryBtn")
 .addEventListener(
   "click",
-  ()=>{
+  () => {
 
-    answers=[
-      null,
-      null,
-      null,
-      null
-    ];
+    answers =
+    [null,null,null,null];
 
-    wrongChecks=0;
+    wrongChecks = 0;
 
-    statusEl.textContent="";
+    statusEl.textContent = "";
 
     showScreen(
       playScreen
@@ -1539,8 +1059,6 @@ document
   }
 );
 
-
-/* START GAME */
 
 newChallenge();
 
