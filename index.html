@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Colour Sequence Game</title>
 
 <style>
+
 *{
   box-sizing:border-box;
 }
@@ -49,6 +52,10 @@ body{
   display:flex;
 }
 
+/* =========================
+   MAIN LANDSCAPE LAYOUT
+========================= */
+
 .play-layout{
   width:100%;
   height:100%;
@@ -72,6 +79,11 @@ h1{
   color:#666;
   font-size:17px;
 }
+
+
+/* =========================
+   PANELS
+========================= */
 
 .card-panel,
 .answer-panel,
@@ -99,6 +111,11 @@ h1{
   margin-bottom:18px;
 }
 
+
+/* =========================
+   COLOUR CIRCLES
+========================= */
+
 .sequence,
 .targets,
 .palette{
@@ -121,43 +138,96 @@ h1{
   box-shadow:0 6px 12px rgba(0,0,0,.08);
 }
 
+
+/* =========================
+   ANSWER SLOTS
+========================= */
+
 .slot{
-  width:78px;
-  height:78px;
-  border-radius:50%;
+  width:88px;
+  min-height:112px;
+  border-radius:20px;
   border:4px dashed #bfc4cc;
   background:white;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
+  padding:7px;
 }
 
-.slot .dot{
-  width:66px;
-  height:66px;
+.answer-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
 }
+
+.answer-item .dot{
+  width:62px;
+  height:62px;
+}
+
+.colour-label{
+  font-size:14px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+
+/* =========================
+   DRAG PIECES
+========================= */
 
 .piece{
   width:78px;
   height:78px;
   border-radius:50%;
+
   border:4px solid rgba(0,0,0,.1);
-  box-shadow:0 8px 16px rgba(0,0,0,.13);
+
+  box-shadow:
+  0 8px 16px rgba(0,0,0,.13);
+
   cursor:grab;
   touch-action:none;
   user-select:none;
+
+  transition:
+  transform .15s ease,
+  box-shadow .15s ease;
 }
 
 .piece:active{
-  transform:scale(1.05);
+  transform:scale(1.08);
 }
+
+.dragging{
+  position:fixed !important;
+  z-index:9999;
+  pointer-events:none;
+  transform:scale(1.10);
+
+  box-shadow:
+  0 14px 28px rgba(0,0,0,.22);
+}
+
+
+/* =========================
+   BOTTOM BUTTONS
+========================= */
 
 .bottom{
   grid-column:1 / 4;
+
   display:flex;
   flex-direction:column;
   align-items:center;
-  gap:12px;
+
+  gap:10px;
 }
 
 .status{
@@ -174,9 +244,14 @@ h1{
 button{
   border:none;
   border-radius:15px;
+
   padding:13px 20px;
+
   font-size:17px;
+  font-weight:600;
+
   cursor:pointer;
+
   background:#222;
   color:#fff;
 }
@@ -186,10 +261,16 @@ button.secondary{
   color:#222;
 }
 
+
+/* =========================
+   REWARD / TRY AGAIN
+========================= */
+
 .reward,
 .tryagain{
   align-items:center;
   justify-content:center;
+
   flex-direction:column;
   text-align:center;
 }
@@ -217,37 +298,52 @@ button.secondary{
   margin:8px 0 24px;
 }
 
-.dragging{
-  position:fixed !important;
-  z-index:999;
-  pointer-events:none;
-  transform:scale(1.08);
-}
+
+/* =========================
+   CONFETTI
+========================= */
 
 .confetti{
   position:absolute;
   inset:0;
+
   pointer-events:none;
   overflow:hidden;
 }
 
 .confetti span{
   position:absolute;
+
   top:-20px;
+
   width:14px;
   height:22px;
+
   border-radius:4px;
-  animation:fall 2.5s linear forwards;
+
+  animation:
+  fall 2.5s linear forwards;
 }
 
 @keyframes fall{
+
   to{
-    transform:translateY(100vh) rotate(720deg);
+    transform:
+    translateY(100vh)
+    rotate(720deg);
+
     opacity:.2;
   }
+
 }
 
+
+/* =========================
+   SMALL SCREEN / CANVA
+========================= */
+
 @media(max-width:900px){
+
   .screen{
     padding:18px;
   }
@@ -280,13 +376,17 @@ button.secondary{
   }
 
   .slot{
-    width:62px;
-    height:62px;
+    width:70px;
+    min-height:94px;
   }
 
-  .slot .dot{
-    width:50px;
-    height:50px;
+  .answer-item .dot{
+    width:48px;
+    height:48px;
+  }
+
+  .colour-label{
+    font-size:11px;
   }
 
   .piece{
@@ -298,43 +398,93 @@ button.secondary{
     padding:10px 14px;
     font-size:14px;
   }
+
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div class="game">
 
-<div id="playScreen" class="screen active">
+
+<!-- =========================
+     GAME SCREEN
+========================= -->
+
+<div id="playScreen"
+class="screen active">
 
 <div class="play-layout">
 
+
 <div class="header">
-<h1>Arrange the Colours</h1>
+
+<h1>
+Arrange the Colours
+</h1>
+
 <p class="subtitle">
 Look at the instruction card and arrange the colours in the same order.
 </p>
+
 </div>
+
+
+<!-- INSTRUCTION CARD -->
 
 <div class="card-panel">
-<div class="panel-title">Instruction Card</div>
-<div id="sequence" class="sequence"></div>
+
+<div class="panel-title">
+Instruction Card
 </div>
+
+<div id="sequence"
+class="sequence">
+</div>
+
+</div>
+
+
+<!-- ANSWER AREA -->
 
 <div class="answer-panel">
-<div class="panel-title">Arrange Here</div>
-<div id="targets" class="targets"></div>
+
+<div class="panel-title">
+Arrange Here
 </div>
 
-<div class="palette-panel">
-<div class="panel-title">Drag the Colours</div>
-<div id="palette" class="palette"></div>
+<div id="targets"
+class="targets">
 </div>
+
+</div>
+
+
+<!-- DRAG AREA -->
+
+<div class="palette-panel">
+
+<div class="panel-title">
+Drag the Colours
+</div>
+
+<div id="palette"
+class="palette">
+</div>
+
+</div>
+
+
+<!-- BUTTONS -->
 
 <div class="bottom">
 
-<div id="status" class="status"></div>
+<div id="status"
+class="status">
+</div>
 
 <div class="controls">
 
@@ -342,11 +492,13 @@ Look at the instruction card and arrange the colours in the same order.
 Check Answer
 </button>
 
-<button id="newBtn" class="secondary">
+<button id="newBtn"
+class="secondary">
 New Card
 </button>
 
-<button id="resetBtn" class="secondary">
+<button id="resetBtn"
+class="secondary">
 Reset
 </button>
 
@@ -354,17 +506,29 @@ Reset
 
 </div>
 
+
 </div>
 </div>
 
 
-<div id="rewardScreen" class="screen reward">
+<!-- =========================
+     REWARD PAGE
+========================= -->
 
-<div class="big">🎉</div>
+<div id="rewardScreen"
+class="screen reward">
 
-<h2>Great Job!</h2>
+<div class="big">
+🎉
+</div>
 
-<p>You arranged the colours correctly.</p>
+<h2>
+Great Job!
+</h2>
+
+<p>
+You arranged the colours correctly.
+</p>
 
 <div class="stars">
 ⭐ ⭐ ⭐
@@ -377,11 +541,20 @@ Next Challenge
 </div>
 
 
-<div id="tryScreen" class="screen tryagain">
+<!-- =========================
+     TRY AGAIN PAGE
+========================= -->
 
-<div class="big">💪</div>
+<div id="tryScreen"
+class="screen tryagain">
 
-<h2>Try Again</h2>
+<div class="big">
+💪
+</div>
+
+<h2>
+Try Again
+</h2>
 
 <p>
 Check the colour order and try once more.
@@ -393,14 +566,22 @@ Try Again
 
 </div>
 
-<div id="confetti" class="confetti"></div>
+
+<div id="confetti"
+class="confetti">
+</div>
+
 
 </div>
 
 
 <script>
 
-const COLORS = {
+/* =========================
+   COLOURS
+========================= */
+
+const COLORS={
 
   red:{
     hex:"#ef4444",
@@ -425,52 +606,106 @@ const COLORS = {
 };
 
 
-const colorKeys =
+const colorKeys=
 Object.keys(COLORS);
 
 
-let targetSequence = [];
+let targetSequence=[];
 
-let answers =
-[null,null,null,null];
+let answers=[
+  null,
+  null,
+  null,
+  null
+];
 
-let wrongChecks = 0;
+let wrongChecks=0;
 
-let currentSpeech = null;
+let currentSpeech=null;
 
 
-const playScreen =
-document.getElementById("playScreen");
+/* =========================
+   ELEMENTS
+========================= */
 
-const rewardScreen =
-document.getElementById("rewardScreen");
+const playScreen=
+document.getElementById(
+  "playScreen"
+);
 
-const tryScreen =
-document.getElementById("tryScreen");
+const rewardScreen=
+document.getElementById(
+  "rewardScreen"
+);
 
-const sequenceEl =
-document.getElementById("sequence");
+const tryScreen=
+document.getElementById(
+  "tryScreen"
+);
 
-const targetsEl =
-document.getElementById("targets");
+const sequenceEl=
+document.getElementById(
+  "sequence"
+);
 
-const paletteEl =
-document.getElementById("palette");
+const targetsEl=
+document.getElementById(
+  "targets"
+);
 
-const statusEl =
-document.getElementById("status");
+const paletteEl=
+document.getElementById(
+  "palette"
+);
 
-const confettiEl =
-document.getElementById("confetti");
+const statusEl=
+document.getElementById(
+  "status"
+);
 
+const confettiEl=
+document.getElementById(
+  "confetti"
+);
+
+
+/* =========================
+   SHUFFLE
+========================= */
 
 function shuffle(arr){
 
-  return [...arr]
-  .sort(() => Math.random() - 0.5);
+  const copy=[...arr];
+
+  for(
+    let i=copy.length-1;
+    i>0;
+    i--
+  ){
+
+    const j=
+    Math.floor(
+      Math.random()*(i+1)
+    );
+
+    [
+      copy[i],
+      copy[j]
+    ]=[
+      copy[j],
+      copy[i]
+    ];
+
+  }
+
+  return copy;
 
 }
 
+
+/* =========================
+   SCREEN CONTROL
+========================= */
 
 function showScreen(screen){
 
@@ -480,153 +715,261 @@ function showScreen(screen){
     tryScreen
   ]
   .forEach(
-    s => s.classList.remove("active")
+    s=>
+    s.classList.remove(
+      "active"
+    )
   );
 
-  screen.classList.add("active");
+  screen.classList.add(
+    "active"
+  );
 
 }
 
 
+/* =========================
+   NEW CHALLENGE
+========================= */
+
 function newChallenge(){
 
-  targetSequence =
+  targetSequence=
   shuffle(colorKeys);
 
-  answers =
-  [null,null,null,null];
+  answers=[
+    null,
+    null,
+    null,
+    null
+  ];
 
-  wrongChecks = 0;
+  wrongChecks=0;
 
-  statusEl.textContent = "";
+  statusEl.textContent="";
 
-  showScreen(playScreen);
+  showScreen(
+    playScreen
+  );
 
   render();
 
 }
 
 
+/* =========================
+   RENDER GAME
+========================= */
+
 function render(){
 
-  sequenceEl.innerHTML = "";
+  /* INSTRUCTION */
 
-  targetSequence.forEach(color => {
+  sequenceEl.innerHTML="";
 
-    const dot =
-    document.createElement("div");
+  targetSequence.forEach(
+    color=>{
 
-    dot.className = "dot";
+      const dot=
+      document.createElement(
+        "div"
+      );
 
-    dot.style.background =
-    COLORS[color].hex;
+      dot.className="dot";
 
-    sequenceEl.appendChild(dot);
+      dot.style.background=
+      COLORS[color].hex;
 
-  });
-
-
-  targetsEl.innerHTML = "";
-
-  answers.forEach((value,index) => {
-
-    const slot =
-    document.createElement("div");
-
-    slot.className = "slot";
-
-    slot.dataset.index =
-    index;
-
-    if(value){
-
-      const dot =
-      document.createElement("div");
-
-      dot.className = "dot";
-
-      dot.style.background =
-      COLORS[value].hex;
-
-      slot.appendChild(dot);
+      sequenceEl.appendChild(
+        dot
+      );
 
     }
-
-    targetsEl.appendChild(slot);
-
-  });
+  );
 
 
-  paletteEl.innerHTML = "";
+  /* ANSWER SLOTS */
 
-  colorKeys.forEach(color => {
+  targetsEl.innerHTML="";
 
-    const piece =
-    document.createElement("div");
+  answers.forEach(
+    (value,index)=>{
 
-    piece.className = "piece";
+      const slot=
+      document.createElement(
+        "div"
+      );
 
-    piece.style.background =
-    COLORS[color].hex;
+      slot.className="slot";
 
-    piece.dataset.color =
-    color;
+      slot.dataset.index=
+      index;
 
-    attachDrag(piece);
 
-    paletteEl.appendChild(piece);
+      if(value){
 
-  });
+        const wrapper=
+        document.createElement(
+          "div"
+        );
+
+        wrapper.className=
+        "answer-item";
+
+
+        const dot=
+        document.createElement(
+          "div"
+        );
+
+        dot.className="dot";
+
+        dot.style.background=
+        COLORS[value].hex;
+
+
+        const label=
+        document.createElement(
+          "div"
+        );
+
+        label.className=
+        "colour-label";
+
+        label.textContent=
+        COLORS[value].label;
+
+
+        wrapper.appendChild(
+          dot
+        );
+
+        wrapper.appendChild(
+          label
+        );
+
+        slot.appendChild(
+          wrapper
+        );
+
+      }
+
+
+      targetsEl.appendChild(
+        slot
+      );
+
+    }
+  );
+
+
+  /* COLOURS TO DRAG */
+
+  paletteEl.innerHTML="";
+
+  colorKeys.forEach(
+    color=>{
+
+      const piece=
+      document.createElement(
+        "div"
+      );
+
+      piece.className=
+      "piece";
+
+      piece.style.background=
+      COLORS[color].hex;
+
+      piece.dataset.color=
+      color;
+
+      piece.setAttribute(
+        "aria-label",
+        COLORS[color].label
+      );
+
+      attachDrag(
+        piece
+      );
+
+      paletteEl.appendChild(
+        piece
+      );
+
+    }
+  );
 
 }
 
 
+/* =========================
+   SPEAK COLOUR
+========================= */
+
 function speakColor(color){
 
-  if(!("speechSynthesis" in window)){
+  if(
+    !(
+      "speechSynthesis"
+      in window
+    )
+  ){
+
     return;
+
   }
 
-  const synth =
+
+  const synth=
   window.speechSynthesis;
+
 
   synth.cancel();
 
   synth.resume();
 
-  currentSpeech =
+
+  currentSpeech=
   new SpeechSynthesisUtterance(
     COLORS[color].label
   );
 
-  currentSpeech.lang =
+
+  currentSpeech.lang=
   "en-US";
 
-  currentSpeech.rate =
-  0.75;
+  currentSpeech.rate=
+  0.72;
 
-  currentSpeech.pitch =
+  currentSpeech.pitch=
   1;
 
-  currentSpeech.volume =
+  currentSpeech.volume=
   1;
 
-  const voices =
+
+  const voices=
   synth.getVoices();
 
-  const englishVoice =
+
+  const englishVoice=
   voices.find(
-    voice =>
+    voice=>
     voice.lang &&
-    voice.lang.startsWith("en")
+    voice.lang
+    .toLowerCase()
+    .startsWith("en")
   );
+
 
   if(englishVoice){
 
-    currentSpeech.voice =
+    currentSpeech.voice=
     englishVoice;
 
   }
+
 
   synth.speak(
     currentSpeech
@@ -635,83 +978,121 @@ function speakColor(color){
 }
 
 
-function beep(correct=true){
+/* =========================
+   CORRECT / WRONG SOUND
+========================= */
+
+function feedbackSound(
+  correct=true
+){
 
   try{
 
-    const AudioCtx =
+    const AudioCtx=
     window.AudioContext ||
     window.webkitAudioContext;
 
-    const ctx =
+
+    const ctx=
     new AudioCtx();
 
-    const osc =
+
+    const osc=
     ctx.createOscillator();
 
-    const gain =
+
+    const gain=
     ctx.createGain();
 
-    osc.connect(gain);
+
+    osc.connect(
+      gain
+    );
 
     gain.connect(
       ctx.destination
     );
 
-    osc.frequency.value =
-    correct ? 720 : 220;
 
-    gain.gain.value =
-    0.08;
+    osc.frequency.value=
+    correct
+    ? 760
+    : 210;
+
+
+    gain.gain.value=
+    0.06;
+
 
     osc.start();
 
+
     osc.stop(
-      ctx.currentTime + 0.18
+      ctx.currentTime
+      +
+      0.16
     );
 
-  }catch(e){}
+  }
+
+  catch(error){}
 
 }
 
 
-function attachDrag(element){
+/* =========================
+   DRAG AND DROP
+========================= */
 
-  let ghost = null;
+function attachDrag(
+  element
+){
+
+  let ghost=null;
 
 
   function start(event){
 
     event.preventDefault();
 
-    const color =
+
+    const color=
     element.dataset.color;
 
-    speakColor(color);
 
-
-    const point =
+    const point=
     event.touches
     ? event.touches[0]
     : event;
 
 
-    ghost =
-    element.cloneNode(true);
+    ghost=
+    element.cloneNode(
+      true
+    );
+
 
     ghost.classList.add(
       "dragging"
     );
 
-    ghost.style.width =
-    element.offsetWidth + "px";
 
-    ghost.style.height =
-    element.offsetHeight + "px";
+    ghost.style.width=
+    element.offsetWidth
+    +
+    "px";
+
+
+    ghost.style.height=
+    element.offsetHeight
+    +
+    "px";
+
 
     document.body.appendChild(
       ghost
     );
+
 
     moveGhost(
       point.clientX,
@@ -723,10 +1104,12 @@ function attachDrag(element){
 
       ev.preventDefault();
 
-      const p =
+
+      const p=
       ev.touches
       ? ev.touches[0]
       : ev;
+
 
       moveGhost(
         p.clientX,
@@ -738,15 +1121,16 @@ function attachDrag(element){
 
     function end(ev){
 
-      const p =
+      const p=
       ev.changedTouches
       ? ev.changedTouches[0]
       : ev;
 
-      const x =
+
+      const x=
       p.clientX;
 
-      const y =
+      const y=
       p.clientY;
 
 
@@ -756,34 +1140,52 @@ function attachDrag(element){
 
       }
 
-      ghost = null;
+
+      ghost=null;
 
 
-      const below =
+      const below=
       document.elementFromPoint(
         x,
         y
       );
 
-      const slot =
+
+      const slot=
       below
-      ? below.closest(".slot")
+      ? below.closest(
+          ".slot"
+        )
       : null;
 
 
       if(slot){
 
-        const index =
+        const index=
         Number(
           slot.dataset.index
         );
 
-        answers[index] =
+
+        answers[index]=
         color;
 
-        render();
 
-        beep(true);
+        /*
+        IMPORTANT:
+        SAY COLOUR AFTER DROP
+        */
+
+        speakColor(
+          color
+        );
+
+
+        /*
+        SHOW COLOUR + WORD
+        */
+
+        render();
 
       }
 
@@ -817,17 +1219,20 @@ function attachDrag(element){
       {passive:false}
     );
 
+
     window.addEventListener(
       "mouseup",
       end,
       {passive:false}
     );
 
+
     window.addEventListener(
       "touchmove",
       move,
       {passive:false}
     );
+
 
     window.addEventListener(
       "touchend",
@@ -843,6 +1248,7 @@ function attachDrag(element){
     start
   );
 
+
   element.addEventListener(
     "touchstart",
     start,
@@ -850,78 +1256,103 @@ function attachDrag(element){
   );
 
 
-  function moveGhost(x,y){
+  function moveGhost(
+    x,
+    y
+  ){
 
     if(!ghost){
+
       return;
+
     }
 
-    ghost.style.left =
-    (
-      x -
-      ghost.offsetWidth / 2
-    )
-    + "px";
 
-    ghost.style.top =
+    ghost.style.left=
     (
-      y -
-      ghost.offsetHeight / 2
+      x
+      -
+      ghost.offsetWidth/2
     )
-    + "px";
+    +
+    "px";
+
+
+    ghost.style.top=
+    (
+      y
+      -
+      ghost.offsetHeight/2
+    )
+    +
+    "px";
 
   }
 
 }
 
 
+/* =========================
+   CHECK ANSWER
+========================= */
+
 function checkAnswer(){
 
   if(
     answers.some(
-      value => !value
+      value=>!value
     )
   ){
 
-    statusEl.textContent =
+    statusEl.textContent=
     "Fill all the circles first.";
 
-    beep(false);
+    feedbackSound(
+      false
+    );
 
     return;
 
   }
 
 
-  const correct =
+  const correct=
   answers.every(
-    (value,index) =>
-    value ===
+    (value,index)=>
+    value===
     targetSequence[index]
   );
 
 
   if(correct){
 
-    beep(true);
+    feedbackSound(
+      true
+    );
+
 
     showScreen(
       rewardScreen
     );
 
+
     celebrate();
 
   }
+
 
   else{
 
     wrongChecks++;
 
-    beep(false);
+
+    feedbackSound(
+      false
+    );
 
 
     if(
-      wrongChecks >= 2
+      wrongChecks>=2
     ){
 
       showScreen(
@@ -930,9 +1361,10 @@ function checkAnswer(){
 
     }
 
+
     else{
 
-      statusEl.textContent =
+      statusEl.textContent=
       "Almost! Check the order and try again.";
 
     }
@@ -942,11 +1374,16 @@ function checkAnswer(){
 }
 
 
+/* =========================
+   CONFETTI
+========================= */
+
 function celebrate(){
 
-  confettiEl.innerHTML = "";
+  confettiEl.innerHTML="";
 
-  const colours = [
+
+  const colours=[
 
     "#ef4444",
     "#3b82f6",
@@ -959,21 +1396,26 @@ function celebrate(){
 
 
   for(
-    let i = 0;
-    i < 50;
+    let i=0;
+    i<50;
     i++
   ){
 
-    const item =
+    const item=
     document.createElement(
       "span"
     );
 
-    item.style.left =
-    Math.random() * 100
-    + "%";
 
-    item.style.background =
+    item.style.left=
+    Math.random()
+    *
+    100
+    +
+    "%";
+
+
+    item.style.background=
     colours[
       Math.floor(
         Math.random()
@@ -982,9 +1424,14 @@ function celebrate(){
       )
     ];
 
-    item.style.animationDelay =
-    Math.random() * 0.8
-    + "s";
+
+    item.style.animationDelay=
+    Math.random()
+    *
+    0.8
+    +
+    "s";
+
 
     confettiEl.appendChild(
       item
@@ -994,8 +1441,10 @@ function celebrate(){
 
 
   setTimeout(
-    () => {
-      confettiEl.innerHTML = "";
+    ()=>{
+
+      confettiEl.innerHTML="";
+
     },
     3000
   );
@@ -1003,8 +1452,14 @@ function celebrate(){
 }
 
 
+/* =========================
+   BUTTONS
+========================= */
+
 document
-.getElementById("checkBtn")
+.getElementById(
+  "checkBtn"
+)
 .addEventListener(
   "click",
   checkAnswer
@@ -1012,7 +1467,9 @@ document
 
 
 document
-.getElementById("newBtn")
+.getElementById(
+  "newBtn"
+)
 .addEventListener(
   "click",
   newChallenge
@@ -1020,15 +1477,23 @@ document
 
 
 document
-.getElementById("resetBtn")
+.getElementById(
+  "resetBtn"
+)
 .addEventListener(
   "click",
-  () => {
+  ()=>{
 
-    answers =
-    [null,null,null,null];
+    answers=[
+      null,
+      null,
+      null,
+      null
+    ];
 
-    statusEl.textContent = "";
+    wrongChecks=0;
+
+    statusEl.textContent="";
 
     render();
 
@@ -1037,7 +1502,9 @@ document
 
 
 document
-.getElementById("nextBtn")
+.getElementById(
+  "nextBtn"
+)
 .addEventListener(
   "click",
   newChallenge
@@ -1045,17 +1512,23 @@ document
 
 
 document
-.getElementById("tryBtn")
+.getElementById(
+  "tryBtn"
+)
 .addEventListener(
   "click",
-  () => {
+  ()=>{
 
-    answers =
-    [null,null,null,null];
+    answers=[
+      null,
+      null,
+      null,
+      null
+    ];
 
-    wrongChecks = 0;
+    wrongChecks=0;
 
-    statusEl.textContent = "";
+    statusEl.textContent="";
 
     showScreen(
       playScreen
@@ -1066,6 +1539,8 @@ document
   }
 );
 
+
+/* START GAME */
 
 newChallenge();
 
