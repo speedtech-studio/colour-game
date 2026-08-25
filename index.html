@@ -3,437 +3,356 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Colour Sequence Game</title>
+<title>Magic Doodle Board</title>
+
 <style>
-  *{box-sizing:border-box}
-  html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    font-family:Arial, Helvetica, sans-serif;
-    background:#f7f8fb;
-    color:#222;
-    touch-action:none;
-  }
-  body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-  }
-  .game{
-    width:min(980px,100%);
-    min-height:620px;
-    background:#fff;
-    border-radius:28px;
-    box-shadow:0 14px 50px rgba(0,0,0,.12);
-    overflow:hidden;
-    position:relative;
-  }
-  .screen{
-    display:none;
-    min-height:620px;
-    padding:28px;
-  }
-  .screen.active{display:block}
-  h1{margin:0 0 8px;font-size:34px}
-  .subtitle{margin:0 0 22px;color:#666;font-size:18px}
-  .instruction-card{
-    border:3px solid #222;
-    border-radius:22px;
-    padding:18px;
-    background:#fffef8;
-    margin-bottom:24px;
-  }
-  .instruction-card h2{
-    margin:0 0 12px;
-    font-size:24px;
-  }
-  .sequence{
-    display:flex;
-    gap:18px;
-    flex-wrap:wrap;
-    align-items:center;
-  }
-  .dot{
-    width:72px;
-    height:72px;
-    border-radius:50%;
-    border:4px solid rgba(0,0,0,.1);
-    box-shadow:inset 0 0 0 4px rgba(255,255,255,.25);
-  }
-  .targets{
-    display:flex;
-    gap:18px;
-    flex-wrap:wrap;
-    margin:18px 0 28px;
-  }
-  .slot{
-    width:84px;
-    height:84px;
-    border-radius:50%;
-    border:4px dashed #c7cad1;
-    background:#fafafa;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .slot.filled{border-style:solid;border-color:#d8dbe2}
-  .palette{
-    display:flex;
-    gap:18px;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:center;
-    padding:18px;
-    background:#f4f6fa;
-    border-radius:22px;
-  }
-  .piece{
-    width:86px;
-    height:86px;
-    border-radius:50%;
-    border:4px solid rgba(0,0,0,.1);
-    box-shadow:0 8px 18px rgba(0,0,0,.12);
-    cursor:grab;
-    touch-action:none;
-    user-select:none;
-    transition:transform .12s ease;
-  }
-  .piece:active{cursor:grabbing; transform:scale(1.05)}
-  .controls{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    margin-top:22px;
-    flex-wrap:wrap;
-  }
-  button{
-    border:none;
-    border-radius:16px;
-    padding:14px 20px;
-    font-size:18px;
-    cursor:pointer;
-    background:#222;
-    color:#fff;
-  }
-  button.secondary{
-    background:#eef0f4;
-    color:#222;
-  }
-  .status{
-    min-height:28px;
-    text-align:center;
-    font-weight:700;
-    font-size:20px;
-    margin-top:14px;
-  }
-  .reward, .tryagain{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-  }
-  .reward .big, .tryagain .big{
-    font-size:80px;
-    margin-bottom:10px;
-  }
-  .reward h2, .tryagain h2{
-    font-size:38px;
-    margin:0 0 10px;
-  }
-  .reward p, .tryagain p{
-    font-size:20px;
-    color:#666;
-    margin:0 0 24px;
-  }
-  .stars{
-    font-size:48px;
-    letter-spacing:8px;
-    margin:12px 0 26px;
-  }
-  .confetti{
-    position:absolute;
-    inset:0;
-    pointer-events:none;
-    overflow:hidden;
-  }
-  .confetti span{
-    position:absolute;
-    top:-20px;
-    width:14px;
-    height:22px;
-    border-radius:4px;
-    animation:fall 2.6s linear forwards;
-  }
-  @keyframes fall{
-    to{transform:translateY(720px) rotate(720deg);opacity:.2}
-  }
-  .dragging{
-    position:fixed !important;
-    z-index:999;
-    pointer-events:none;
-    transform:scale(1.08);
-  }
-  @media (max-width:700px){
-    body{padding:0}
-    .game{min-height:100vh;border-radius:0}
-    .screen{min-height:100vh;padding:18px}
-    h1{font-size:28px}
-    .dot{width:58px;height:58px}
-    .slot{width:68px;height:68px}
-    .piece{width:72px;height:72px}
-  }
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#fff;
+  font-family:Arial,Helvetica,sans-serif;
+  touch-action:none;
+}
+
+.app{
+  width:100%;
+  height:100%;
+  position:relative;
+  background:#fff;
+}
+
+#board{
+  display:block;
+  width:100%;
+  height:100%;
+  background:#fff;
+  touch-action:none;
+  cursor:crosshair;
+}
+
+.toolbar{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.92);
+  box-shadow:0 6px 24px rgba(0,0,0,.14);
+  z-index:10;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:10px 14px;
+  background:#111;
+  color:white;
+  font-size:15px;
+}
+
+.secondary{
+  background:#eee;
+  color:#111;
+}
+
+.control{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:13px;
+}
+
+input[type=color]{
+  width:38px;
+  height:38px;
+  border:none;
+}
+
+input[type=range]{
+  width:110px;
+}
+
+.hint{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(0,0,0,.06);
+  color:#555;
+  font-size:13px;
+  pointer-events:none;
+}
+
+@media(max-width:600px){
+  .toolbar{bottom:10px;gap:6px;padding:8px}
+  .control span{display:none}
+  input[type=range]{width:80px}
+}
 </style>
 </head>
+
 <body>
-<div class="game">
-  <div id="playScreen" class="screen active">
-    <h1>Arrange the Colours</h1>
-    <p class="subtitle">Look at the card. Drag the colours into the circles in the same order.</p>
 
-    <div class="instruction-card">
-      <h2>Instruction Card</h2>
-      <div id="sequence" class="sequence"></div>
-    </div>
+<div class="app">
 
-    <div id="targets" class="targets"></div>
+<canvas id="board"></canvas>
 
-    <div class="palette" id="palette"></div>
+<div class="hint">
+Draw anything — it disappears after 5 seconds ✨
+</div>
 
-    <div class="status" id="status"></div>
+<div class="toolbar">
 
-    <div class="controls">
-      <button id="checkBtn">Check Answer</button>
-      <button id="newBtn" class="secondary">New Card</button>
-      <button id="resetBtn" class="secondary">Reset</button>
-    </div>
-  </div>
+<div class="control">
+<span>Color</span>
+<input id="color" type="color" value="#111111">
+</div>
 
-  <div id="rewardScreen" class="screen reward">
-    <div class="big">🎉</div>
-    <h2>Great Job!</h2>
-    <p>You arranged the colours correctly.</p>
-    <div class="stars">⭐ ⭐ ⭐</div>
-    <button id="nextBtn">Next Challenge</button>
-  </div>
+<div class="control">
+<span>Size</span>
+<input id="size" type="range" min="2" max="30" value="7">
+</div>
 
-  <div id="tryScreen" class="screen tryagain">
-    <div class="big">💪</div>
-    <h2>Try Again</h2>
-    <p>That order is not quite right yet.</p>
-    <button id="tryBtn">Try Again</button>
-  </div>
+<button id="undo" class="secondary">Undo</button>
+<button id="clear">Clear</button>
 
-  <div id="confetti" class="confetti"></div>
+</div>
 </div>
 
 <script>
-const COLORS = {
-  red:    {hex:'#ef4444', label:'Red'},
-  blue:   {hex:'#3b82f6', label:'Blue'},
-  yellow: {hex:'#facc15', label:'Yellow'},
-  green:  {hex:'#22c55e', label:'Green'}
+
+const canvas=document.getElementById("board");
+const ctx=canvas.getContext("2d");
+
+const colorInput=document.getElementById("color");
+const sizeInput=document.getElementById("size");
+
+const LIFETIME=5000;
+const FADE_TIME=1200;
+
+let strokes=[];
+let currentStroke=null;
+let drawing=false;
+let animation=null;
+
+function resizeCanvas(){
+
+const dpr=window.devicePixelRatio||1;
+
+const rect=canvas.getBoundingClientRect();
+
+canvas.width=rect.width*dpr;
+canvas.height=rect.height*dpr;
+
+ctx.setTransform(dpr,0,0,dpr,0,0);
+
+}
+
+window.addEventListener("resize",resizeCanvas);
+
+resizeCanvas();
+
+
+function getPosition(e){
+
+const rect=canvas.getBoundingClientRect();
+
+return{
+x:e.clientX-rect.left,
+y:e.clientY-rect.top
 };
 
-const colorKeys = Object.keys(COLORS);
-let targetSequence = [];
-let answers = [null,null,null,null];
-let wrongChecks = 0;
-
-const playScreen = document.getElementById('playScreen');
-const rewardScreen = document.getElementById('rewardScreen');
-const tryScreen = document.getElementById('tryScreen');
-const sequenceEl = document.getElementById('sequence');
-const targetsEl = document.getElementById('targets');
-const paletteEl = document.getElementById('palette');
-const statusEl = document.getElementById('status');
-const confettiEl = document.getElementById('confetti');
-
-function shuffle(arr){
-  return [...arr].sort(()=>Math.random()-0.5);
 }
 
-function newChallenge(){
-  targetSequence = shuffle(colorKeys);
-  answers = [null,null,null,null];
-  wrongChecks = 0;
-  statusEl.textContent = '';
-  showScreen(playScreen);
-  render();
+
+canvas.addEventListener("pointerdown",e=>{
+
+e.preventDefault();
+
+drawing=true;
+
+canvas.setPointerCapture(e.pointerId);
+
+currentStroke={
+points:[getPosition(e)],
+color:colorInput.value,
+width:Number(sizeInput.value),
+created:performance.now()
+};
+
+strokes.push(currentStroke);
+
+startAnimation();
+
+});
+
+
+canvas.addEventListener("pointermove",e=>{
+
+if(!drawing)return;
+
+currentStroke.points.push(getPosition(e));
+
+});
+
+
+canvas.addEventListener("pointerup",()=>{
+
+drawing=false;
+currentStroke=null;
+
+});
+
+
+function drawStroke(stroke,alpha){
+
+const pts=stroke.points;
+
+if(!pts.length)return;
+
+ctx.save();
+
+ctx.globalAlpha=alpha;
+
+ctx.strokeStyle=stroke.color;
+ctx.fillStyle=stroke.color;
+
+ctx.lineWidth=stroke.width;
+
+ctx.lineCap="round";
+ctx.lineJoin="round";
+
+if(pts.length===1){
+
+ctx.beginPath();
+
+ctx.arc(
+pts[0].x,
+pts[0].y,
+stroke.width/2,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}else{
+
+ctx.beginPath();
+
+ctx.moveTo(
+pts[0].x,
+pts[0].y
+);
+
+for(let i=1;i<pts.length;i++){
+
+ctx.lineTo(
+pts[i].x,
+pts[i].y
+);
+
 }
+
+ctx.stroke();
+
+}
+
+ctx.restore();
+
+}
+
 
 function render(){
-  sequenceEl.innerHTML = '';
-  targetSequence.forEach(c=>{
-    const d = document.createElement('div');
-    d.className = 'dot';
-    d.style.background = COLORS[c].hex;
-    d.setAttribute('aria-label', COLORS[c].label);
-    sequenceEl.appendChild(d);
-  });
 
-  targetsEl.innerHTML = '';
-  answers.forEach((value, index)=>{
-    const slot = document.createElement('div');
-    slot.className = 'slot' + (value ? ' filled' : '');
-    slot.dataset.index = index;
-    if(value){
-      const d = document.createElement('div');
-      d.className = 'dot';
-      d.style.width = '68px';
-      d.style.height = '68px';
-      d.style.background = COLORS[value].hex;
-      slot.appendChild(d);
-    }
-    targetsEl.appendChild(slot);
-  });
+ctx.clearRect(
+0,
+0,
+canvas.clientWidth,
+canvas.clientHeight
+);
 
-  paletteEl.innerHTML = '';
-  colorKeys.forEach(c=>{
-    const p = document.createElement('div');
-    p.className = 'piece';
-    p.style.background = COLORS[c].hex;
-    p.dataset.color = c;
-    p.setAttribute('role','button');
-    p.setAttribute('aria-label', COLORS[c].label);
-    attachDrag(p);
-    paletteEl.appendChild(p);
-  });
+const now=performance.now();
+
+strokes=strokes.filter(
+s=>now-s.created<LIFETIME
+);
+
+for(const stroke of strokes){
+
+const age=now-stroke.created;
+
+let alpha=1;
+
+if(age>LIFETIME-FADE_TIME){
+
+alpha=
+(LIFETIME-age)
+/FADE_TIME;
+
 }
 
-function showScreen(screen){
-  [playScreen,rewardScreen,tryScreen].forEach(s=>s.classList.remove('active'));
-  screen.classList.add('active');
+drawStroke(stroke,alpha);
+
 }
 
-function speakColor(color){
-  if(!('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(COLORS[color].label);
-  u.rate = 0.85;
-  u.pitch = 1.0;
-  u.volume = 1;
-  speechSynthesis.speak(u);
+if(strokes.length){
+
+animation=requestAnimationFrame(render);
+
+}else{
+
+animation=null;
+
 }
 
-function beep(type='good'){
-  try{
-    const AudioCtx = window.AudioContext || window.webkitAudioContext;
-    const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.frequency.value = type==='good' ? 720 : 220;
-    gain.gain.value = .08;
-    osc.start();
-    osc.stop(ctx.currentTime + (type==='good' ? .15 : .22));
-  }catch(e){}
 }
 
-function attachDrag(el){
-  let ghost=null;
 
-  const start = (e)=>{
-    e.preventDefault();
-    const color = el.dataset.color;
-    speakColor(color);
+function startAnimation(){
 
-    const point = e.touches ? e.touches[0] : e;
-    ghost = el.cloneNode(true);
-    ghost.classList.add('dragging');
-    ghost.style.width = el.offsetWidth+'px';
-    ghost.style.height = el.offsetHeight+'px';
-    document.body.appendChild(ghost);
-    moveGhost(point.clientX, point.clientY);
+if(!animation){
 
-    const move = ev=>{
-      const p = ev.touches ? ev.touches[0] : ev;
-      moveGhost(p.clientX,p.clientY);
-    };
+animation=requestAnimationFrame(render);
 
-    const end = ev=>{
-      const p = ev.changedTouches ? ev.changedTouches[0] : ev;
-      const x=p.clientX, y=p.clientY;
-      ghost?.remove();
-      ghost=null;
-
-      const slot = document.elementFromPoint(x,y)?.closest('.slot');
-      if(slot){
-        const idx = Number(slot.dataset.index);
-        answers[idx] = color;
-        render();
-        beep('good');
-      }
-
-      window.removeEventListener('mousemove', move);
-      window.removeEventListener('mouseup', end);
-      window.removeEventListener('touchmove', move);
-      window.removeEventListener('touchend', end);
-    };
-
-    window.addEventListener('mousemove', move, {passive:false});
-    window.addEventListener('mouseup', end, {passive:false});
-    window.addEventListener('touchmove', move, {passive:false});
-    window.addEventListener('touchend', end, {passive:false});
-  };
-
-  el.addEventListener('mousedown', start);
-  el.addEventListener('touchstart', start, {passive:false});
-
-  function moveGhost(x,y){
-    if(!ghost) return;
-    ghost.style.left = (x - ghost.offsetWidth/2)+'px';
-    ghost.style.top = (y - ghost.offsetHeight/2)+'px';
-  }
 }
 
-function checkAnswer(){
-  if(answers.some(v=>!v)){
-    statusEl.textContent = 'Fill all the circles first.';
-    beep('bad');
-    return;
-  }
-
-  const correct = answers.every((v,i)=>v===targetSequence[i]);
-  if(correct){
-    beep('good');
-    showScreen(rewardScreen);
-    celebrate();
-  }else{
-    wrongChecks++;
-    beep('bad');
-    if(wrongChecks >= 2){
-      showScreen(tryScreen);
-    }else{
-      statusEl.textContent = 'Almost! Check the order and try again.';
-    }
-  }
 }
 
-function celebrate(){
-  confettiEl.innerHTML='';
-  const confettiColors=['#ef4444','#3b82f6','#facc15','#22c55e','#a855f7','#fb7185'];
-  for(let i=0;i<55;i++){
-    const s=document.createElement('span');
-    s.style.left=Math.random()*100+'%';
-    s.style.background=confettiColors[Math.floor(Math.random()*confettiColors.length)];
-    s.style.animationDelay=(Math.random()*.8)+'s';
-    s.style.transform=`rotate(${Math.random()*180}deg)`;
-    confettiEl.appendChild(s);
-  }
-  setTimeout(()=>confettiEl.innerHTML='',3200);
-}
 
-document.getElementById('checkBtn').addEventListener('click',checkAnswer);
-document.getElementById('newBtn').addEventListener('click',newChallenge);
-document.getElementById('resetBtn').addEventListener('click',()=>{answers=[null,null,null,null];statusEl.textContent='';render();});
-document.getElementById('nextBtn').addEventListener('click',newChallenge);
-document.getElementById('tryBtn').addEventListener('click',()=>{answers=[null,null,null,null];wrongChecks=0;statusEl.textContent='';showScreen(playScreen);render();});
+document.getElementById("clear")
+.addEventListener("click",()=>{
 
-newChallenge();
+strokes=[];
+
+ctx.clearRect(
+0,
+0,
+canvas.clientWidth,
+canvas.clientHeight
+);
+
+});
+
+
+document.getElementById("undo")
+.addEventListener("click",()=>{
+
+strokes.pop();
+
+});
+
 </script>
+
 </body>
 </html>
